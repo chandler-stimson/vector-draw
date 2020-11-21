@@ -1,0 +1,61 @@
+body {
+  font-size: 13px;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+}
+#container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+}
+#container canvas {
+  box-shadow: 0 0 0 1000px var(--canvas-bg, #f1f1f1);
+}
+toolbar-view {
+  z-index: 1;
+  background-color: var(--toolbar-bg, #fff);
+}
+#settings {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 400px;
+  background-color: var(--settings-bg, #fff);
+  z-index: 2;
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  grid-gap: 5px;
+  align-items: start;
+  justify-items: start;
+  white-space: nowrap;
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
+  box-shadow: 0 0 2px #000;
+  outline: none;
+}
+#settings:not(.active):not(:focus-within) {
+  display: none;
+}
+#settings input[type=number],
+#settings input[type=text] {
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  background-color: var(--input-bg, #f1f1f1);
+  padding: 5px;
+}
+#settings input[type=number]:focus,
+#settings input[type=text]:focus {
+  background-color: var(--input-bg-active, #c0e7ff);
+}
+#settings input[type=number]:disabled,
+#settings input[type=text]:disabled {
+  opacity: 0.2;
+}
