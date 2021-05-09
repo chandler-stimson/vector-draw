@@ -29,8 +29,12 @@ else {
       setTimeout(() => {
         chrome.runtime.sendMessage({
           method: 'download'
-        }, () => {
+        }, href => {
           iframe.contentWindow.postMessage({method: 'show-toolbar'}, '*');
+          const a = document.createElement('a');
+          a.href = href;
+          a.download = document.title + '.png';
+          a.click();
         });
       }, 200);
     }
