@@ -30,5 +30,8 @@
   },
   "web_accessible_resources": [
     "data/window/index.html"
-  ]
+  ],
+  "commands": {
+    "_execute_browser_action": {}
+  }
 }
