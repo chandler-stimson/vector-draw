@@ -19,9 +19,9 @@ const open = () => chrome.storage.local.get({
 chrome.browserAction.onClicked.addListener(() => chrome.tabs.executeScript({
   file: 'data/inject.js',
   runAt: 'document_start'
-}, () => {
+}, a => {
   const lastError = chrome.runtime.lastError;
-  if (lastError) {
+  if (lastError || a[0] !== true) {
     open();
   }
 }));
