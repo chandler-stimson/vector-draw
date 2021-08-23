@@ -1,11 +1,13 @@
 {
-  "manifest_version": 2,
-  "version": "0.1.1",
+  "manifest_version": 3,
+  "version": "0.2.0",
   "name": "VectorDraw - Paint on Tab",
-  "description": "Draw interactive objects (circle, rectangular, polygon) or use brush on the current tab and capture result",
+  "description": "__MSG_description__",
+  "default_locale": "en",
   "permissions": [
     "storage",
     "activeTab",
+    "scripting",
     "contextMenus"
   ],
   "offline_enabled": true,
@@ -19,16 +21,14 @@
     "512": "data/icons/512.png"
   },
   "background": {
-    "persistent": false,
-    "scripts": [
-      "background.js"
-    ]
+    "service_worker": "worker.js"
   },
   "homepage_url": "https://add0n.com/vector-draw.html",
-  "browser_action": {
+  "action": {
     "default_title": "Left click to draw on page and right-click to open a new instance"
   },
-  "web_accessible_resources": [
-    "data/window/index.html"
-  ]
+  "web_accessible_resources": [{
+    "resources": ["data/window/index.html"],
+    "matches": ["*://*/*"]
+  }]
 }

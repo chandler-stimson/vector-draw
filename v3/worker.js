@@ -1,30 +1,42 @@
 'use strict';
 
-const open = () => chrome.storage.local.get({
-  width: 900,
-  height: 700,
-  left: screen.availLeft + Math.round((screen.availWidth - 900) / 2),
-  top: screen.availTop + Math.round((screen.availHeight - 700) / 2)
-}, prefs => {
-  chrome.windows.create({
-    url: chrome.extension.getURL('data/window/index.html'),
-    width: prefs.width,
-    height: prefs.height,
-    left: prefs.left,
-    top: prefs.top,
-    type: 'popup'
-  });
-});
+const open = async () => {
+  const win = await chrome.windows.getCurrent();
 
-chrome.browserAction.onClicked.addListener(() => chrome.tabs.executeScript({
-  file: 'data/inject.js',
-  runAt: 'document_start'
-}, a => {
-  const lastError = chrome.runtime.lastError;
-  if (lastError || a[0] !== true) {
+  chrome.storage.local.get({
+    width: 900,
+    height: 700,
+    left: win.left + Math.round((win.width - 900) / 2),
+    top: win.top + Math.round((win.height - 700) / 2)
+  }, prefs => {
+    chrome.windows.create({
+      url: '/data/window/index.html',
+      width: prefs.width,
+      height: prefs.height,
+      left: prefs.left,
+      top: prefs.top,
+      type: 'popup'
+    });
+  });
+};
+
+chrome.action.onClicked.addListener(async tab => {
+  try {
+    const r = await chrome.scripting.executeScript({
+      target: {
+        tabId: tab.id
+      },
+      files: ['data/inject.js']
+    });
+    if (r[0].result !== true) {
+      throw Error('cannot inject');
+    }
+  }
+  catch (e) {
+    console.log(e);
     open();
   }
-}));
+});
 
 chrome.runtime.onMessage.addListener((request, sender, response) => {
   if (request.method === 'download') {
@@ -41,7 +53,7 @@ chrome.runtime.onMessage.addListener((request, sender, response) => {
     chrome.contextMenus.create({
       id: 'open-editor',
       title: 'Open Editor',
-      contexts: ['browser_action']
+      contexts: ['action']
     });
   };
   chrome.runtime.onStartup.addListener(startup);
